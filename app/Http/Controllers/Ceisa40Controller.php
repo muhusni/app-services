@@ -28,7 +28,7 @@ class Ceisa40Controller extends Controller
         return $dataPIB;
     }
 
-    public function showDocCount($kodeDokumen) 
+    public function showDocCount($kodeDokumen)
     {
         $query = (object) [
             "kodeKantor" => "050100",
@@ -45,7 +45,7 @@ class Ceisa40Controller extends Controller
         return $dataPIB->size;
     }
 
-    public function showV1() 
+    public function showV1()
     {
         $dataPIB = $this->getDokumenCeisa40V1();
         return $dataPIB;
@@ -154,5 +154,35 @@ class Ceisa40Controller extends Controller
             ->post($URL);
 
         return json_decode($response);
+    }
+
+    public function loginPortal()
+    {
+        $URL = env('API_URL') . '/v2/authws/user/login';
+        $data = [
+            "username" => env("H2H_USER"),
+            "password" => env("H2H_PASSWORD")
+        ];
+        $response = Http::acceptJson()
+            // ->withToken(env('CEISA40_TOKEN'))
+            ->post($URL, $data);
+        
+        return json_decode($response->status());
+    }
+
+    public function loginCeisa40()
+    {
+        $URL = env('API_CEISA40') . '/v3/authws/user/login';
+        $HEADERS = ['beacukai-api-key' => env("BC_API_KEY")];
+        $data = [
+            "username" => env("USER_CEISA40"),
+            "password" => env("PASS_CEISA40")
+        ];
+        $response = Http::acceptJson()
+            // ->withToken(env('CEISA40_TOKEN'))
+            ->withHeaders($HEADERS)
+            ->post($URL, $data);
+        
+        return json_decode($response->status());
     }
 }
