@@ -28,6 +28,23 @@ class Ceisa40Controller extends Controller
         return $dataPIB;
     }
 
+    public function showCeisa40(Request $request) 
+    {
+        $query = (object) [
+            "kodeKantor" => "050100",
+            "kodeJalur" => $request->kodeJalur,
+            "namaPerusahaan" => $request->namaPerusahaan,
+            "nomorAju" => $request->nomorAju,
+            "status" => $request->status,
+            "kodeDokumen" => $request->kodeDokumen,
+            "nomorDaftar" => $request->nomorDaftar,
+            "tanggalDokumenStart" => $request->tanggalDokumenStart,
+            "tanggalDokumenEnd" => $request->tanggalDokumenEnd,
+        ];
+        $dataPIB = $this->getDokumenCeisa40($query);
+        return $dataPIB;
+    }
+
     public function showDocCount($kodeDokumen)
     {
         $query = (object) [

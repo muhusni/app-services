@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('peb/{aju}', [InswController::class, 'getPebData']);
     Route::post('ceisa40/portal/login', [Ceisa40Controller::class, 'loginPortal']);
     Route::post('ceisa40/login', [Ceisa40Controller::class, 'loginCeisa40']);
+    Route::post('ceisa40/dokumen', [Ceisa40Controller::class, 'showCeisa40']);
     Route::get('ceisa40/dokumen/v1', [Ceisa40Controller::class, 'showV1']);
     Route::get('ceisa40/dokumen/jumlah/{kodeDokumen}', [Ceisa40Controller::class, 'showDocCount']);
     Route::get('ceisa40/dokumen/{aju}', [Ceisa40Controller::class, 'show']);
