@@ -170,7 +170,7 @@ class Ceisa40Controller extends Controller
             ->withHeaders($HEADERS)
             ->post($URL);
 
-        return json_decode($response);
+        return response()->json(json_decode($response), $response->getStatusCode());
     }
 
     public function loginPortal()

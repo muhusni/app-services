@@ -29,7 +29,8 @@ class TiketController extends Controller
      */
     public function show(Tiket $tiket)
     {
-        return response()->json($tiket);
+        $tiketWithReplies = Tiket::with('ticketReplies')->find($tiket->ID);
+        return response()->json($tiketWithReplies);
     }
 
     /**
