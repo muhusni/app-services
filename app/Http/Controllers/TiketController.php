@@ -13,7 +13,25 @@ class TiketController extends Controller
      */
     public function index()
     {
-        return Tiket::all();
+        $tikets = Tiket::with('ticketReplies')->paginate(10);
+
+        $tikets->each(function ($tiket) {
+            $tiket->ticket_IKC = null; // Initialize to null
+    
+            $tiket->ticketReplies->each(function ($reply) use ($tiket) {
+                if (strpos($reply->body, 'IKC') !== false) {
+                    preg_match('/\b\d{6}\b/', $reply->body, $matches);
+    
+                    // Check if a 6-digit number is found
+                    $sixDigitNumber = isset($matches[0]) ? $matches[0] : null;
+    
+                    // Set the 6-digit number to the ticket_IKC property
+                    $tiket->ticket_IKC = $sixDigitNumber;
+                }
+            });
+        });
+    
+        return $tikets;
     }
 
     /**
@@ -30,6 +48,18 @@ class TiketController extends Controller
     public function show(Tiket $tiket)
     {
         $tiketWithReplies = Tiket::with('ticketReplies')->find($tiket->ID);
+        $tiketWithReplies->ticket_IKC = null;
+        
+        $tiketWithReplies->ticketReplies->each(function ($reply) use ($tiketWithReplies) {
+            if (strpos($reply->body, 'IKC') !== false) {
+                preg_match('/\b\d{6}\b/', $reply->body, $matches);
+
+                // Check if a 6-digit number is found
+                $sixDigitNumber = isset($matches[0]) ? $matches[0] : null;
+
+                $tiketWithReplies->ticket_IKC = $sixDigitNumber;
+            }
+        });
         return response()->json($tiketWithReplies);
     }
 
