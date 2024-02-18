@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Tiket extends Model
 {
@@ -23,5 +24,15 @@ class Tiket extends Model
     public function ticketReplies(): HasMany
     {
         return $this->hasMany(TicketReply::class, 'ticketid', 'ID');
+    }
+
+    public function ticketCategory(): HasOne
+    {
+        return $this->hasOne(TicketCategory::class,'ID', 'categoryid');
+    }
+
+    public function ticketStatus(): HasOne
+    {
+        return $this->hasOne(TicketStatus::class,'ID', 'status');
     }
 }

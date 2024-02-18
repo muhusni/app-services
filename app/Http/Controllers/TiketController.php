@@ -11,9 +11,9 @@ class TiketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tikets = Tiket::with('ticketReplies')->paginate(10);
+        $tikets = Tiket::with('ticketReplies', 'ticketStatus', 'ticketCategory')->orderBy("last_reply_timestamp", "DESC")->paginate(10)->withQueryString();
 
         $tikets->each(function ($tiket) {
             $tiket->ticket_IKC = null; // Initialize to null
@@ -30,6 +30,17 @@ class TiketController extends Controller
                 }
             });
         });
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+    
+            // Apply your search condition based on the parameter
+            $tikets->where(function ($q) use ($searchTerm) {
+                $q->where('ticket_IKC', 'LIKE', "%$searchTerm%");
+                    // Add other search conditions as needed
+                    // ->orWhere('column2', 'LIKE', "%$searchTerm%");
+            });
+        }
     
         return $tikets;
     }
@@ -47,7 +58,7 @@ class TiketController extends Controller
      */
     public function show(Tiket $tiket)
     {
-        $tiketWithReplies = Tiket::with('ticketReplies')->find($tiket->ID);
+        $tiketWithReplies = Tiket::with('ticketReplies', 'ticketStatus', 'ticketCategory')->find($tiket->ID);
         $tiketWithReplies->ticket_IKC = null;
         
         $tiketWithReplies->ticketReplies->each(function ($reply) use ($tiketWithReplies) {
