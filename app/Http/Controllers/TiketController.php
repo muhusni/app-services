@@ -24,9 +24,7 @@ class TiketController extends Controller
     
                     // Check if a 6-digit number is found
                     $sixDigitNumber = isset($matches[0]) ? $matches[0] : null;
-    
-                    // Set the 6-digit number to the ticket_IKC property
-                    $tiket->ticket_IKC = $sixDigitNumber;
+                    if (!($sixDigitNumber === null)) $tiket->ticket_IKC = $sixDigitNumber;
                 }
             });
         });
